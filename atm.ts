@@ -18,13 +18,13 @@ let userDetails=await inq.prompt([
 console.clear();
 console.log(`${userDetails.userName}, congratulations you have registered yourself successfully!\nNow you can use the ATM..!`);
 let exe=true;//using to control execution.
+let pass=await inq.prompt([{
+    message:"Enter your pin : ",
+    type:"number",
+    name:"pin"
+}]);
+if(pass.pin===userDetails.userPin){
 do{
-    let pass=await inq.prompt([{
-        message:"Enter your pin : ",
-        type:"number",
-        name:"pin"
-    }]);
-    if(pass.pin===userDetails.userPin){
         let trans=await inq.prompt([{ //using to get transaction mode by the user.
             type:"list",
             name:"transMode",
@@ -62,18 +62,18 @@ do{
         else if(trans.transMode==="Check Balance"){
             console.log(`Your current balance is ${userDetails.accAmt}`);
         }
+        let userCh=await inq.prompt([{
+            name:"choice",
+            type:"list",
+            message:"Do you want more transactions ? ",
+            choices:["Yes","No"]
+        }]);
+        
+        (userCh.choice==="Yes")?exe=true:exe=false;
     }
-    else{
-        console.log("Wrong pin!!..\nTry again..");
-    }
-    let userCh=await inq.prompt([{
-        name:"choice",
-        type:"list",
-        message:"Do you want more transactions ? ",
-        choices:["Yes","No"]
-    }]);
-
-    (userCh.choice==="Yes")?exe=true:exe=false;
+    while(exe);
 }
-while(exe);
-console.log(`${userDetails.userName}, thanks for using the ATM...`);
+else{
+    console.log("Wrong pin!!..\nSorry you cannot use ATM at this moment!..");
+}
+console.log(`${userDetails.userName}, thank you...`);
